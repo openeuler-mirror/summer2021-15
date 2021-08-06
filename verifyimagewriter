@@ -1,0 +1,58 @@
+#!/bin/bash
+# 
+# alias GETTEXT='gettext "verifyimagewriter"'
+# GETTEXT='gettext "verifyimagewriter"'
+# po files commands:
+# xgettext -o po/verifyimagewriter.pot -L Shell verifyimagewriter
+# msgfmt -v verifyimagewriter-zh_CN.po -o verifyimagewriter.mo
+
+. gettext.sh
+
+TEXTDOMAIN=verifyimagewriter
+export TEXTDOMAIN
+TEXTDOMAINDIR=/usr/share/locale
+export TEXTDOMAINDIR
+
+function notify-send() {
+    #Detect the name of the display in use
+    local display=":$(ls /tmp/.X11-unix/* | sed 's#/tmp/.X11-unix/X##' | head -n 1)"
+
+    #Detect the user using such display
+    local user=$(who | grep '('$display')' | awk '{print $1}' | head -n 1)
+
+    #Detect the id of the user
+    local uid=$(id -u $user)
+
+    sudo -u $user DISPLAY=$display DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$uid/bus notify-send "$@"
+}
+
+notify-send "$(gettext "Verifying the integrity of the USB in comparison to the downloaded ISO")" "$(gettext "This can take a few minutes")"
+
+CheckedFile=$(cat /tmp/iso.txt)
+echo ${CheckedFile}
+UsbDevice=$(blkid | grep iso9660 | head -c 8)
+
+if [ ! ${UsbDevice} ]; then
+
+    notify-send "$(gettext "No Flash USB detected")"
+
+else
+
+    sha256=$(sha256sum ${CheckedFile} | head -c 64)
+    bites=$(wc -c ${CheckedFile} | awk '{print $1;}')
+    usb=$(pkexec /usr/bin/head -c ${bites} ${UsbDevice} | sha256sum | head -c 64)
+
+    if [ ${sha256} == ${usb} ]; then
+
+        notify-send "$(gettext "The downloaded ISO file and USB write match")" ${sha256}
+
+    fi
+
+    if [ ${sha256} != ${usb} ]; then
+
+        notify-send "$(gettext "ISO files do not match, do not use this USB for install media")" "$(gettext "make sure only one USB flash device is connected and run Verify again")"
+
+    fi
+
+fi
+
