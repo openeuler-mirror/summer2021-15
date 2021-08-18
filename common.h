@@ -7,10 +7,14 @@
 
 #include <QObject>
 #include <QString>
+#include <QtGlobal>
 
 #include <type_traits>
 
-#include "platform.h"
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <linux/fs.h>
+#include <libudev.h>
 
 // Application name used for titles in messageboxes
 #define ApplicationTitle QString(QObject::tr("Image Writer"))
@@ -71,7 +75,7 @@ QString readFileContents(const QString& fileName);
 //  nothing
 typedef void (*AddFlashDeviceCallbackProc)(void* cbParam, UsbDevice* device);
 
-// Performs platform-specific enumeration of USB flash disks and calls the callback
+// Performs enumeration of USB flash disks and calls the callback
 // function for adding these devices into the application GUI structure
 // Input:
 //  callback - callback function to be called for each new device
@@ -89,5 +93,75 @@ bool platformEnumFlashDevices(AddFlashDeviceCallbackProc callback, void* cbParam
 //  false if error occurs
 //  does not return if elevation request succeeded (the current instance terminates)
 bool ensureElevated();
+
+class SuProgram
+{
+protected:
+    // Name of the su-application
+    const QString m_binaryName;
+    // Full path to the executable (if present)
+    QString m_binaryPath;
+    // Additional arguments
+    const QStringList m_suArgs;
+    // Whether it accepts target command line as separate arguments or single argument
+    const bool m_splitArgs;
+
+    // Constructor
+    SuProgram(QString binaryName, QStringList suArgs, bool splitArgs);
+
+public:
+    // Destructor
+    virtual ~SuProgram() {}
+    // Check if the program is present in the system; by default searching in PATH is used
+    virtual bool isPresent() const;
+    // Check whether the su-application is native to the current desktop environment
+    virtual bool isNative() const = 0;
+    // Restarts the current application with the specified arguments using the GUI su program
+    // Returns only if error occurred (execv() is used)
+    virtual void restartAsRoot(const QStringList& args);
+};
+
+
+// Derivative classes for specific su-applications
+
+class pkSu : public SuProgram
+{
+public:
+    pkSu();
+    virtual ~pkSu() {}
+    virtual bool isNative() const;
+};
+
+class XdgSu : public SuProgram
+{
+public:
+    XdgSu();
+    virtual ~XdgSu() {}
+    virtual bool isNative() const;
+};
+
+class KdeSu : public SuProgram
+{
+public:
+    KdeSu();
+    virtual ~KdeSu() {}
+    virtual bool isNative() const;
+};
+
+class GkSu : public SuProgram
+{
+public:
+    GkSu();
+    virtual ~GkSu() {}
+    virtual bool isNative() const;
+};
+
+class BeeSu : public SuProgram
+{
+public:
+    BeeSu();
+    virtual ~BeeSu() {}
+    virtual bool isNative() const;
+};
 
 #endif // COMMON_H

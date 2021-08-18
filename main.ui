@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainDialog</class>
- <widget class="QDialog" name="MainDialog">
+ <class>MainWindow</class>
+ <widget class="QDialog" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -248,7 +248,7 @@
   <connection>
    <sender>imageSelectButton</sender>
    <signal>clicked()</signal>
-   <receiver>MainDialog</receiver>
+   <receiver>MainWindow</receiver>
    <slot>openImageFile()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -264,7 +264,7 @@
   <connection>
    <sender>writeButton</sender>
    <signal>clicked()</signal>
-   <receiver>MainDialog</receiver>
+   <receiver>MainWindow</receiver>
    <slot>writeImageToDevice()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -280,7 +280,7 @@
   <connection>
    <sender>deviceRefreshButton</sender>
    <signal>clicked()</signal>
-   <receiver>MainDialog</receiver>
+   <receiver>MainWindow</receiver>
    <slot>scheduleEnumFlashDevices()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -296,7 +296,7 @@
   <connection>
    <sender>clearButton</sender>
    <signal>clicked()</signal>
-   <receiver>MainDialog</receiver>
+   <receiver>MainWindow</receiver>
    <slot>clearDevice()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -312,7 +312,7 @@
   <connection>
    <sender>verifyButton</sender>
    <signal>clicked()</signal>
-   <receiver>MainDialog</receiver>
+   <receiver>MainWindow</receiver>
    <slot>verifyDevice()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -7,8 +7,9 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QFile>
 
-#include "maindialog.h"
+#include "mainwindow.h"
 #include "usbdevice.h"
 
 class ImageWriter : public QObject
@@ -45,6 +46,16 @@ public slots:
     void writeImage();
     // Implements reaction to the cancel request from user
     void cancelWriting();
+};
+
+class PhysicalDevice : public QFile
+{
+    Q_OBJECT
+public:
+    PhysicalDevice(const QString& name);
+
+    // Opens the selected device in WriteOnly mode
+    virtual bool open();
 };
 
 #endif // IMAGEWRITER_H

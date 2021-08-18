@@ -6,7 +6,6 @@
 
 #include "common.h"
 #include "imagewriter.h"
-#include "physicaldevice.h"
 
 ImageWriter::ImageWriter(const QString& ImageFile, UsbDevice* Device, QObject *parent) :
     QObject(parent),
@@ -149,4 +148,21 @@ void ImageWriter::cancelWriting()
     m_Mutex.lock();
     m_CancelWriting = true;
     m_Mutex.unlock();
+}
+
+PhysicalDevice::PhysicalDevice(const QString& name) :
+    QFile(name)
+{
+}
+
+// Opens the selected device in WriteOnly mode
+bool PhysicalDevice::open()
+{
+#if defined(Q_OS_LINUX)
+    // Simply use QFile, it works fine in Linux
+    // TODO: Use system call open with O_DIRECT
+    return QFile::open(QIODevice::WriteOnly);
+#else
+    return false;
+#endif
 }

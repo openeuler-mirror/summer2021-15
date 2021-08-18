@@ -1,10 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Linux implementation of UsbDeviceMonitor
+// Linux implementation of UsbDevice
 
 #include <dlfcn.h>
 
-#include "usbdevicemonitor.h"
-#include "usbdevicemonitor_lin_p.h"
+#include "usbdevice.h"
 
 // Declare required functions as weak so that they were not reported as missing at compile time.
 // In runtime it is required to ensure they are defined: we do it by checking that libudev is loaded.
