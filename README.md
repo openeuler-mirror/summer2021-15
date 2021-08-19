@@ -12,7 +12,7 @@ https://gitee.com/openeuler-competition/summer-2021/issues/I3E9CG
 
 识别U盘设备直接调用Linux提供的接口`libudev`。=> [usbdevice.cpp](usbdevice.cpp)
 
-写入镜像使用QIODevice类，然后使用QFile进行镜像的写入操作。[imagewriter.cpp](imagewriter.cpp)
+写入镜像使用QIODevice类，然后使用QFile进行镜像的写入操作。=> [imagewriter.cpp](imagewriter.cpp)
 
 清除将使用`mkfs`直接调用命令进行格式化的形式来实现。
 
