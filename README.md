@@ -14,7 +14,7 @@ https://gitee.com/openeuler-competition/summer-2021/issues/I3E9CG
 
 写入镜像使用QIODevice类，然后使用QFile进行镜像的写入操作。=> [imagewriter.cpp](imagewriter.cpp)
 
-清除将使用`mkfs`直接调用命令进行格式化的形式来实现。
+清除将使用`mkfs`直接调用命令进行格式化的形式来实现。=> [mainwindow.cpp](mainwindow.cpp)
 
 验证则直接使用shell脚本进行实现，通过UI调用。=> [verifyimagewriter](verifyimagewriter)
 
