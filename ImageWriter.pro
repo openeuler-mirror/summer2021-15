@@ -61,7 +61,7 @@ contains(QT_CONFIG, static) {
     QMAKE_LFLAGS += -s
 }
 
-TRANSLATIONS = lang/imagewriter-zh_CN.ts \
+TRANSLATIONS = lang/imagewriter-zh_CN.ts
 
 # install
 isEmpty(PREFIX) {
